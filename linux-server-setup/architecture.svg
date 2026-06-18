@@ -1,0 +1,158 @@
+<svg viewBox="0 0 1200 1400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define styles -->
+  <defs>
+    <style>
+      .title { font-size: 28px; font-weight: bold; fill: #1f4788; }
+      .section-title { font-size: 18px; font-weight: bold; fill: #2d5aa6; }
+      .label { font-size: 14px; fill: #333; font-family: Arial, sans-serif; }
+      .small-text { font-size: 12px; fill: #666; font-family: Arial, sans-serif; }
+      .box { stroke: #2d5aa6; stroke-width: 2; fill: #e8f0f8; }
+      .box-dark { stroke: #1f4788; stroke-width: 2; fill: #d4e6f1; }
+      .box-highlight { stroke: #667eea; stroke-width: 2; fill: #f0f4ff; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-thick { stroke: #667eea; stroke-width: 3; fill: none; marker-end: url(#arrowhead-blue); }
+      .security-good { fill: #28a745; }
+      .security-bad { fill: #dc3545; }
+      .port-text { font-size: 12px; font-weight: bold; fill: white; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#667eea" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">Stage 0: Linux Server + Nginx + SSL Architecture</text>
+
+  <!-- PART 1: Network Flow (Top Half) -->
+  <text x="50" y="90" class="section-title">Network Request Flow</text>
+
+  <!-- User/Browser -->
+  <rect x="450" y="120" width="300" height="80" class="box" rx="5"/>
+  <text x="600" y="155" text-anchor="middle" class="label">User Browser</text>
+  <text x="600" y="180" text-anchor="middle" class="small-text">viviannduka.duckdns.org</text>
+
+  <!-- Arrow down -->
+  <path d="M 600 200 L 600 240" class="arrow"/>
+
+  <!-- DNS -->
+  <rect x="450" y="240" width="300" height="80" class="box" rx="5"/>
+  <text x="600" y="275" text-anchor="middle" class="label">DNS Resolution</text>
+  <text x="600" y="300" text-anchor="middle" class="small-text">DuckDNS → 56.228.5.190</text>
+
+  <!-- Arrow down -->
+  <path d="M 600 320 L 600 360" class="arrow"/>
+
+  <!-- AWS EC2 -->
+  <rect x="400" y="360" width="400" height="100" class="box-dark" rx="5"/>
+  <text x="600" y="395" text-anchor="middle" class="label" style="font-size: 16px;">AWS EC2 Instance</text>
+  <text x="600" y="420" text-anchor="middle" class="small-text">Ubuntu 22.04 • 56.228.5.190</text>
+  <text x="600" y="445" text-anchor="middle" class="small-text">User: hngdevops (non-root)</text>
+
+  <!-- Arrow down -->
+  <path d="M 600 460 L 600 500" class="arrow"/>
+
+  <!-- UFW Firewall -->
+  <rect x="350" y="500" width="500" height="120" class="box-highlight" rx="5"/>
+  <text x="600" y="535" text-anchor="middle" class="label" style="font-weight: bold;">UFW Firewall (Default: DENY)</text>
+  
+  <!-- Firewall ports -->
+  <rect x="380" y="550" width="80" height="50" fill="#28a745" stroke="#1a5f2f" stroke-width="2" rx="3"/>
+  <text x="420" y="580" text-anchor="middle" class="port-text">22</text>
+  <text x="420" y="595" text-anchor="middle" class="small-text" style="fill: white;">SSH</text>
+  
+  <rect x="520" y="550" width="80" height="50" fill="#28a745" stroke="#1a5f2f" stroke-width="2" rx="3"/>
+  <text x="560" y="580" text-anchor="middle" class="port-text">80</text>
+  <text x="560" y="595" text-anchor="middle" class="small-text" style="fill: white;">HTTP</text>
+  
+  <rect x="660" y="550" width="80" height="50" fill="#28a745" stroke="#1a5f2f" stroke-width="2" rx="3"/>
+  <text x="700" y="580" text-anchor="middle" class="port-text">443</text>
+  <text x="700" y="595" text-anchor="middle" class="small-text" style="fill: white;">HTTPS</text>
+  
+  <rect x="800" y="550" width="90" height="50" fill="#dc3545" stroke="#a02622" stroke-width="2" rx="3"/>
+  <text x="845" y="580" text-anchor="middle" class="port-text" style="font-size: 10px;">All Others</text>
+  <text x="845" y="595" text-anchor="middle" class="small-text" style="fill: white;">BLOCKED</text>
+
+  <!-- Arrow down -->
+  <path d="M 600 620 L 600 660" class="arrow"/>
+
+  <!-- Nginx -->
+  <rect x="400" y="660" width="400" height="100" class="box-dark" rx="5"/>
+  <text x="600" y="695" text-anchor="middle" class="label" style="font-size: 16px;">Nginx Web Server</text>
+  <text x="600" y="720" text-anchor="middle" class="small-text">/etc/nginx/ configuration</text>
+  <text x="600" y="745" text-anchor="middle" class="small-text">HTTP + HTTPS routing</text>
+
+  <!-- Arrow down to split -->
+  <path d="M 600 760 L 600 800" class="arrow"/>
+
+  <!-- Split into HTTP and HTTPS -->
+  <!-- HTTP Box -->
+  <rect x="200" y="800" width="200" height="100" class="box" rx="5"/>
+  <text x="300" y="835" text-anchor="middle" class="label" style="font-weight: bold;">HTTP (Port 80)</text>
+  <text x="300" y="860" text-anchor="middle" class="small-text">Catches unencrypted</text>
+  <text x="300" y="880" text-anchor="middle" class="small-text">Redirects → HTTPS (301)</text>
+
+  <!-- HTTPS Box -->
+  <rect x="550" y="800" width="300" height="100" class="box-highlight" rx="5"/>
+  <text x="700" y="835" text-anchor="middle" class="label" style="font-weight: bold;">HTTPS (Port 443)</text>
+  <text x="700" y="860" text-anchor="middle" class="small-text">TLS/SSL Encryption</text>
+  <text x="700" y="880" text-anchor="middle" class="small-text">Let's Encrypt Certificate</text>
+
+  <!-- Arrows from HTTPS -->
+  <path d="M 700 900 L 700 940" class="arrow"/>
+
+  <!-- Location blocks -->
+  <text x="700" y="960" text-anchor="middle" class="label" style="font-weight: bold;">Nginx Location Blocks</text>
+  
+  <!-- GET / -->
+  <rect x="480" y="980" width="180" height="80" class="box" rx="5"/>
+  <text x="570" y="1010" text-anchor="middle" class="label" style="font-weight: bold;">GET /</text>
+  <text x="570" y="1035" text-anchor="middle" class="small-text">/var/www/html/</text>
+  <text x="570" y="1055" text-anchor="middle" class="small-text">index.html</text>
+
+  <!-- GET /api -->
+  <rect x="800" y="980" width="180" height="80" class="box" rx="5"/>
+  <text x="890" y="1010" text-anchor="middle" class="label" style="font-weight: bold;">GET /api</text>
+  <text x="890" y="1035" text-anchor="middle" class="small-text">application/json</text>
+  <text x="890" y="1055" text-anchor="middle" class="small-text">status: 200</text>
+
+  <!-- PART 2: Security Layers (Bottom) -->
+  <text x="50" y="1120" class="section-title">Defense in Depth: 3 Security Layers</text>
+
+  <!-- Layer 1: Network -->
+  <rect x="50" y="1150" width="350" height="140" class="box-highlight" stroke="#667eea" stroke-width="3" rx="5"/>
+  <text x="225" y="1180" text-anchor="middle" class="label" style="font-weight: bold; font-size: 16px;">Layer 1: Network</text>
+  <circle cx="80" cy="1210" r="5" class="security-good"/>
+  <text x="95" y="1215" class="small-text">UFW Firewall Active</text>
+  <circle cx="80" cy="1235" r="5" class="security-good"/>
+  <text x="95" y="1240" class="small-text">Only 3 ports open (22,80,443)</text>
+  <circle cx="80" cy="1260" r="5" class="security-good"/>
+  <text x="95" y="1265" class="small-text">All others BLOCKED</text>
+
+  <!-- Layer 2: SSH -->
+  <rect x="425" y="1150" width="350" height="140" class="box-highlight" stroke="#667eea" stroke-width="3" rx="5"/>
+  <text x="600" y="1180" text-anchor="middle" class="label" style="font-weight: bold; font-size: 16px;">Layer 2: SSH Security</text>
+  <circle cx="455" cy="1210" r="5" class="security-good"/>
+  <text x="470" y="1215" class="small-text">Key-based auth only</text>
+  <circle cx="455" cy="1235" r="5" class="security-good"/>
+  <text x="470" y="1240" class="small-text">Root login disabled</text>
+  <circle cx="455" cy="1260" r="5" class="security-good"/>
+  <text x="470" y="1265" class="small-text">Non-root user (hngdevops)</text>
+
+  <!-- Layer 3: HTTPS -->
+  <rect x="800" y="1150" width="350" height="140" class="box-highlight" stroke="#667eea" stroke-width="3" rx="5"/>
+  <text x="975" y="1180" text-anchor="middle" class="label" style="font-weight: bold; font-size: 16px;">Layer 3: Data Security</text>
+  <circle cx="830" cy="1210" r="5" class="security-good"/>
+  <text x="845" y="1215" class="small-text">HTTPS encryption</text>
+  <circle cx="830" cy="1235" r="5" class="security-good"/>
+  <text x="845" y="1240" class="small-text">Let's Encrypt certificate</text>
+  <circle cx="830" cy="1260" r="5" class="security-good"/>
+  <text x="845" y="1265" class="small-text">TLS 1.2+ only</text>
+
+  <!-- Legend -->
+  <text x="50" y="1340" class="section-title">Key Technologies</text>
+  <text x="50" y="1370" class="small-text">• Cloud: AWS EC2 (Ubuntu 22.04) • Web Server: Nginx 1.24</text>
+  <text x="50" y="1390" class="small-text">• SSL/TLS: Let's Encrypt + Certbot • Firewall: UFW • Domain: DuckDNS</text>
+</svg>
