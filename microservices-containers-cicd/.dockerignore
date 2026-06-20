@@ -1,0 +1,17 @@
+.git
+.gitignore
+.github
+.env
+**/.env
+*.env
+node_modules
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+htmlcov
+.vscode
+.idea
+*.md
+Dockerfile
+docker-compose*.yml

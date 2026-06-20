@@ -1,0 +1,103 @@
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: jobsys-redis
+    restart: unless-stopped
+    networks:
+      - jobsys-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+        reservations:
+          cpus: "0.10"
+          memory: 64M
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: jobsys-api
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      APP_ENV: ${APP_ENV}
+    networks:
+      - jobsys-net
+    ports:
+      - "${API_PORT}:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: 384M
+        reservations:
+          cpus: "0.15"
+          memory: 128M
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    container_name: jobsys-worker
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      APP_ENV: ${APP_ENV}
+    networks:
+      - jobsys-net
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: 384M
+        reservations:
+          cpus: "0.15"
+          memory: 128M
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jobsys-frontend
+    restart: unless-stopped
+    environment:
+      API_URL: ${API_URL}
+      PORT: ${FRONTEND_PORT}
+    networks:
+      - jobsys-net
+    ports:
+      - "${FRONTEND_PORT}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+networks:
+  jobsys-net:
+    name: jobsys-net
+    driver: bridge
